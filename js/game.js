@@ -11,6 +11,7 @@ window.addEventListener('orientationchange', resizeCanvas, false);
 
 var gameArea = document.getElementById("gameArea");
 var ctx = gameArea.getContext('2d');
+
 var Game = {
     hero: {
       position: {
@@ -43,18 +44,16 @@ setInterval(function(){
     runGame();
 }, 100);
 
-function resizeCanvas()
-{
-    gameArea = document.getElementById("gameArea");
-    if (gameArea.width  < window.innerWidth)
-    {
-        gameArea.width  = window.innerWidth;
-    }
+function redraw() {
+    ctx.strokeStyle = 'blue';
+    ctx.lineWidth = '5';
+    ctx.strokeRect(0, 0, window.innerWidth, window.innerHeight);
+}
 
-    if (gameArea.height < window.innerHeight)
-    {
-        gameArea.height = window.innerHeight;
-    }
+function resizeCanvas() {
+    gameArea.width = window.innerWidth;
+    gameArea.height = window.innerHeight;
+    redraw();
 }
 
 function getClientWidth()
