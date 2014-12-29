@@ -5,8 +5,6 @@
  * Time: 14:31
  * To change this template use File | Settings | File Templates.
  */
-(function(){if(typeof ({}.__defineGetter__) != "function" && typeof (Object.defineProperty) != "function")
-        alert("Your browser doesn't support latest JavaScript version.");})()
 
 window.addEventListener('resize', resizeCanvas, false);
 window.addEventListener('orientationchange', resizeCanvas, false);
