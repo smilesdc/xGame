@@ -1,4 +1,4 @@
 xGame
 =====
 
-Java Script xGame.
+HTML5 Based game.

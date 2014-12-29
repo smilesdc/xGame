@@ -1,0 +1,11 @@
+/* HTML5 Based mini-game | Main cascading style sheets
+ * Source: https://github.com/smilesdc/xGame
+ */
+
+body {
+    background-color: ivory;
+    margin: 0px;
+}
+canvas {
+    border: 1px solid gray; /* Just for debug */
+}
