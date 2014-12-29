@@ -5,58 +5,58 @@
  * Time: 14:31
  * To change this template use File | Settings | File Templates.
  */
-    (function(){if(typeof ({}.__defineGetter__) != "function" && typeof (Object.defineProperty) != "function")
-            alert("Your browser doesn't support latest JavaScript version.");})()
+(function(){if(typeof ({}.__defineGetter__) != "function" && typeof (Object.defineProperty) != "function")
+        alert("Your browser doesn't support latest JavaScript version.");})()
+
+window.addEventListener('resize', resizeCanvas, false);
+window.addEventListener('orientationchange', resizeCanvas, false);
 
 var gameArea = document.getElementById("gameArea");
 var ctx = gameArea.getContext('2d');
-gameArea.width = 480;
-gameArea.height = 640;
+var Game = {
+    hero: {
+      position: {
+        x: 0,
+        y: 0
+      },
+      attributes: {
+          speed: 0
+      }
+    },
+    render:{
+        width: 10,
+        heigth: 10,
+        draw: function(){
+            ctx.clearRect(0, 0, getClientWidth(), getClientHeight());
+            ctx.fillRect(Game.hero.position.x, Game.hero.position.y, Game.render.width, Game.render.heigth);
+        }
+    }
+};
 
-var x = getClientCenterX()/2, y = getClientCenterY()/2;
 
-var posX = 0, posY = 0;
+Game.hero.position.x = getClientCenterX();
+Game.hero.position.y = getClientCenterY();
 
-drawMove(x, y, gameArea, ctx);
-
-function drawMove(x, y, canvas, ctx){
-    posX = x;
-    posY = y;
-    ctx.fillRect(posX, posY, 10, 10);
+function runGame(){
+    Game.render.draw();
 }
 
-function drawCleared(x, y, canvas, ctx){
-    ctx.clearRect(posX, posY, 11, 11);
-}
+setInterval(function(){
+    runGame();
+}, 100);
 
-document.onkeydown = function(e){
-    var key;
-    if (e) {
-        key = e.which;
-    }
-    else if (window.event) {
-        key = window.event.keyCode;
-    }
-
-    switch(key){
-        case 38:
-            drawCleared(posX, posY+1, gameArea, ctx);
-            drawMove(posX, posY-=1, gameArea, ctx);
-            break;
-        case 40:
-            drawCleared(posX, posY-1, gameArea, ctx);
-            drawMove(posX, posY+=1, gameArea, ctx);
-            break;
-        case 37:
-            drawCleared(posX-1, posY, gameArea, ctx);
-            drawMove(posX-=1, posY, gameArea, ctx);
-            break;
-        case 39:
-            drawCleared(posX+1, posY, gameArea, ctx);
-            drawMove(posX+=1, posY, gameArea, ctx);
-            break;
+function resizeCanvas()
+{
+    gameArea = document.getElementById("gameArea");
+    if (gameArea.width  < window.innerWidth)
+    {
+        gameArea.width  = window.innerWidth;
     }
 
+    if (gameArea.height < window.innerHeight)
+    {
+        gameArea.height = window.innerHeight;
+    }
 }
 
 function getClientWidth()
@@ -77,4 +77,28 @@ function getClientCenterX()
 function getClientCenterY()
 {
     return parseInt(getClientHeight()/2);
+}
+
+document.onkeydown = function(e){
+    var key;
+    if (e) {
+        key = e.which;
+    }
+    else if (window.event) {
+        key = window.event.keyCode;
+    }
+    switch(key){
+        case 38:
+            Game.hero.position.y -=1;
+            break;
+        case 40:
+            Game.hero.position.y +=1;
+            break;
+        case 37:
+            Game.hero.position.x -=1;
+            break;
+        case 39:
+            Game.hero.position.x +=1;
+            break;
+    }
 }
