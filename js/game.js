@@ -48,26 +48,20 @@ var Game = {
 
 Game.hero.position.x = getClientCenterX();
 Game.hero.position.y = getClientCenterY();
+
 loop();
+
 function loop() {
     requestAnimationFrame(loop);
     Game.hero.position.y += Game.hero.position.velY;
     Game.hero.position.x += Game.hero.position.velX;
     Game.render.drawPlayer();
     Game.render.drawBox();
-
-}
-
-function redraw() {
-    ctx.strokeStyle = 'blue';
-    ctx.lineWidth = '5';
-    ctx.strokeRect(0, 0, window.innerWidth, window.innerHeight);
 }
 
 function resizeCanvas() {
     gameArea.width = window.innerWidth;
     gameArea.height = window.innerHeight;
-    redraw();
 }
 
 function getClientWidth() {
@@ -124,7 +118,7 @@ var keyboard = (function () {
                 callback: callback
             });
         }
-    }
+    };
 
     that.keyup = {
         right: function (callback) {
@@ -151,7 +145,7 @@ var keyboard = (function () {
                 callback: callback
             });
         }
-    }
+    };
 
     window.addEventListener('keydown', function (key) {
         for (var i = 0; i < keydowns.length; i++) {
@@ -170,26 +164,26 @@ var keyboard = (function () {
     });
 
     return that;
-}())
+}());
 
 keyboard.keydown.right(function () {
     Game.hero.position.velX = Game.hero.attributes.friction;
-})
+});
 keyboard.keydown.left(function () {
     Game.hero.position.velX = -Game.hero.attributes.friction;
-})
+});
 keyboard.keydown.up(function () {
     Game.hero.position.velY = -Game.hero.attributes.friction;
-})
+});
 keyboard.keydown.down(function () {
     Game.hero.position.velY = Game.hero.attributes.friction;
-})
+});
 keyboard.keyup.down(function () {
     Game.hero.position.velY = 0;
-})
+});
 keyboard.keyup.up(function () {
     Game.hero.position.velY = 0;
-})
+});
 keyboard.keyup.right(function () {
     Game.hero.position.velX = 0;
 });
