@@ -17,8 +17,39 @@ var Game = {
             velY: 0
         },
         attributes: {
-            speed: 1, // TODO: Speed modifier
-            friction: 2.60
+            speed: 2.6
+        },
+
+        update: function () {
+            this.updateVelocity();
+            this.updatePosition();
+        },
+        
+        updateVelocity: function () {
+            var velX = 0;
+            var velY = 0;
+            if (Keyboard.isKeyDown(Keyboard.keys.left_arrow) || Keyboard.isKeyDown(Keyboard.keys.a))
+                velX -= 1;
+            if (Keyboard.isKeyDown(Keyboard.keys.right_arrow) || Keyboard.isKeyDown(Keyboard.keys.d))
+                velX += 1;
+            if (Keyboard.isKeyDown(Keyboard.keys.up_arrow) || Keyboard.isKeyDown(Keyboard.keys.w))
+                velY -= 1;
+            if (Keyboard.isKeyDown(Keyboard.keys.down_arrow) || Keyboard.isKeyDown(Keyboard.keys.s))
+                velY += 1;
+
+            var velModule = Math.sqrt(velX * velX + velY * velY);
+            if (velModule == 0) {
+                // To avoid 0/0 division
+                velModule = 1;
+            }
+
+            this.position.velX = velX / velModule * this.attributes.speed;
+            this.position.velY = velY / velModule * this.attributes.speed;
+        },
+        
+        updatePosition: function () {
+            this.position.x += this.position.velX;
+            this.position.y += this.position.velY;
         }
 
     },
@@ -53,8 +84,8 @@ loop();
 
 function loop() {
     requestAnimationFrame(loop);
-    Game.hero.position.y += Game.hero.position.velY;
-    Game.hero.position.x += Game.hero.position.velX;
+    Game.hero.update();
+
     Game.render.drawPlayer();
     Game.render.drawBox();
 }
@@ -79,114 +110,3 @@ function getClientCenterX() {
 function getClientCenterY() {
     return parseInt(getClientHeight() / 2, 0);
 }
-
-var keyboard = (function () {
-    var that = {};
-
-    var direction = {
-        RIGHT: 39,
-        LEFT: 37,
-        UP: 38,
-        DOWN: 40
-    };
-
-    var keydowns = [];
-    var keyups = [];
-
-    that.keydown = {
-        right: function (callback) {
-            keydowns.push({
-                keycode: direction.RIGHT,
-                callback: callback
-            });
-        },
-        left: function (callback) {
-            keydowns.push({
-                keycode: direction.LEFT,
-                callback: callback
-            });
-        },
-        up: function (callback) {
-            keydowns.push({
-                keycode: direction.UP,
-                callback: callback
-            });
-        },
-        down: function (callback) {
-            keydowns.push({
-                keycode: direction.DOWN,
-                callback: callback
-            });
-        }
-    };
-
-    that.keyup = {
-        right: function (callback) {
-            keyups.push({
-                keycode: direction.RIGHT,
-                callback: callback
-            });
-        },
-        left: function (callback) {
-            keyups.push({
-                keycode: direction.LEFT,
-                callback: callback
-            });
-        },
-        up: function (callback) {
-            keyups.push({
-                keycode: direction.UP,
-                callback: callback
-            });
-        },
-        down: function (callback) {
-            keyups.push({
-                keycode: direction.DOWN,
-                callback: callback
-            });
-        }
-    };
-
-    window.addEventListener('keydown', function (key) {
-        for (var i = 0; i < keydowns.length; i++) {
-            if (keydowns[i].keycode === key.keyCode) {
-                keydowns[i].callback();
-            }
-        }
-    });
-
-    window.addEventListener('keyup', function (key) {
-        for (var i = 0; i < keyups.length; i++) {
-            if (keyups[i].keycode === key.keyCode) {
-                keyups[i].callback();
-            }
-        }
-    });
-
-    return that;
-}());
-
-keyboard.keydown.right(function () {
-    Game.hero.position.velX = Game.hero.attributes.friction;
-});
-keyboard.keydown.left(function () {
-    Game.hero.position.velX = -Game.hero.attributes.friction;
-});
-keyboard.keydown.up(function () {
-    Game.hero.position.velY = -Game.hero.attributes.friction;
-});
-keyboard.keydown.down(function () {
-    Game.hero.position.velY = Game.hero.attributes.friction;
-});
-keyboard.keyup.down(function () {
-    Game.hero.position.velY = 0;
-});
-keyboard.keyup.up(function () {
-    Game.hero.position.velY = 0;
-});
-keyboard.keyup.right(function () {
-    Game.hero.position.velX = 0;
-});
-keyboard.keyup.left(function () {
-    Game.hero.position.velX = 0;
-});
